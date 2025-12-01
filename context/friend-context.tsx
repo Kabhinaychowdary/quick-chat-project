@@ -10,6 +10,12 @@
 import type React from "react"
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react"
 import { useAuth } from "./auth-context"
+import {
+  getAllRequests,
+  saveAllRequests,
+  getAllFriendships,
+  saveAllFriendships,
+} from "@/lib/storage-adapter"
 
 // Friend request status types
 export type RequestStatus = "pending" | "accepted" | "rejected"
@@ -62,43 +68,19 @@ const POLL_INTERVAL = 1000 // Check for updates every second
 
 // Helper functions to manage global database
 const getAllRequestsFromDB = (): FriendRequest[] => {
-  if (typeof window === "undefined") return []
-  try {
-    const data = localStorage.getItem(GLOBAL_REQUESTS_DB)
-    return data ? JSON.parse(data) : []
-  } catch (e) {
-    console.error("Error reading requests DB:", e)
-    return []
-  }
+  return getAllRequests().map((r: any) => ({ ...r, createdAt: new Date(r.createdAt) }))
 }
 
 const getAllFriendshipsFromDB = (): Friendship[] => {
-  if (typeof window === "undefined") return []
-  try {
-    const data = localStorage.getItem(GLOBAL_FRIENDSHIPS_DB)
-    return data ? JSON.parse(data) : []
-  } catch (e) {
-    console.error("Error reading friendships DB:", e)
-    return []
-  }
+  return getAllFriendships().map((f: any) => ({ ...f, createdAt: new Date(f.createdAt) }))
 }
 
 const saveRequestsToDB = (requests: FriendRequest[]) => {
-  if (typeof window === "undefined") return
-  try {
-    localStorage.setItem(GLOBAL_REQUESTS_DB, JSON.stringify(requests))
-  } catch (e) {
-    console.error("Error saving requests DB:", e)
-  }
+  saveAllRequests(requests)
 }
 
 const saveFriendshipsToDB = (friendships: Friendship[]) => {
-  if (typeof window === "undefined") return
-  try {
-    localStorage.setItem(GLOBAL_FRIENDSHIPS_DB, JSON.stringify(friendships))
-  } catch (e) {
-    console.error("Error saving friendships DB:", e)
-  }
+  saveAllFriendships(friendships)
 }
 
 export function FriendProvider({ children }: { children: React.ReactNode }) {

@@ -9,7 +9,8 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useCallback, useEffect } from "react"
-import { getAllUsers, saveRegisteredUser, type User } from "@/utils/dummy-users"
+import type { User } from "@/utils/dummy-users"
+import { getAllUsers, saveAllUsers } from "@/lib/storage-adapter"
 
 interface AuthContextType {
   user: User | null
@@ -95,7 +96,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       status: "online",
     }
 
-    saveRegisteredUser(newUser)
+    // persist via storage adapter
+    const updated = [...allUsers, newUser]
+    saveAllUsers(updated)
 
     setUser(newUser)
     localStorage.setItem("quickchat_user", JSON.stringify(newUser))

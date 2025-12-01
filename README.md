@@ -111,6 +111,21 @@ quick-chat/
    npm run dev
    ```
 
+4. **(Optional) Start the json-server backend**
+   This project includes a small `json-server` database (`db.json`). The app will
+   continue to work with localStorage, but the storage adapter will try to sync
+   data to the backend if it is running. To start it:
+
+   ```bash
+   npm run backend
+   # opens json-server on http://localhost:4000
+   ```
+
+   If `json-server` is not installed globally, install it with:
+   ```bash
+   npm install -D json-server
+   ```
+
 4. **Open in browser**
    ```
    http://localhost:3000

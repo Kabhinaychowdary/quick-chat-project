@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "backend": "json-server --watch db.json --port 4000",
     "lint": "eslint .",
     "start": "next start"
   },
@@ -64,6 +65,7 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "json-server": "^1.0.0-beta.3",
     "postcss": "^8.5",
     "tailwindcss": "^4.1.9",
     "tw-animate-css": "1.3.3",

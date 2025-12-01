@@ -9,8 +9,15 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react"
-import { dummyChats, dummyMessages, type Chat, type Message } from "@/utils/dummy-chats"
-import { getAllUsers, type User } from "@/utils/dummy-users"
+import type { Chat, Message } from "@/utils/dummy-chats"
+import type { User } from "@/utils/dummy-users"
+import {
+  getStoredChats,
+  getStoredMessages,
+  saveChatsToStorage,
+  saveMessagesToStorage,
+  getAllUsers,
+} from "@/lib/storage-adapter"
 import { useAuth } from "./auth-context"
 
 const STORAGE_KEYS = {
@@ -19,60 +26,7 @@ const STORAGE_KEYS = {
   MIGRATION_V2: "quickchat_migrated_v2", // Flag to track migration
 }
 
-function getStoredChats(): Chat[] {
-  if (typeof window === "undefined") return []
-  try {
-    const stored = localStorage.getItem(STORAGE_KEYS.CHATS)
-    if (stored) {
-      const parsed = JSON.parse(stored)
-      return parsed.map((chat: Chat) => ({
-        ...chat,
-        createdAt: new Date(chat.createdAt),
-        lastMessage: chat.lastMessage
-          ? { ...chat.lastMessage, timestamp: new Date(chat.lastMessage.timestamp) }
-          : undefined,
-      }))
-    }
-  } catch (e) {
-    console.error("[Chat Context] Error reading chats from localStorage:", e)
-  }
-  return []
-}
 
-function getStoredMessages(): Message[] {
-  if (typeof window === "undefined") return []
-  try {
-    const stored = localStorage.getItem(STORAGE_KEYS.MESSAGES)
-    if (stored) {
-      const parsed = JSON.parse(stored)
-      return parsed.map((msg: Message) => ({
-        ...msg,
-        timestamp: new Date(msg.timestamp),
-      }))
-    }
-  } catch (e) {
-    console.error("[Chat Context] Error reading messages from localStorage:", e)
-  }
-  return []
-}
-
-function saveChatsToStorage(chats: Chat[]) {
-  if (typeof window === "undefined") return
-  try {
-    localStorage.setItem(STORAGE_KEYS.CHATS, JSON.stringify(chats))
-  } catch (e) {
-    console.error("[Chat Context] Error saving chats to localStorage:", e)
-  }
-}
-
-function saveMessagesToStorage(messages: Message[]) {
-  if (typeof window === "undefined") return
-  try {
-    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messages))
-  } catch (e) {
-    console.error("[Chat Context] Error saving messages to localStorage:", e)
-  }
-}
 
 /**
  * Remove duplicate chats. For group chats, dedupe by group name so

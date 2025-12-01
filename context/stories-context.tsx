@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react"
 import { useAuth } from "./auth-context"
+import { getStories, saveStories } from "@/lib/storage-adapter"
 
 export interface Story {
   id: string
@@ -45,7 +46,7 @@ const StoriesContext = createContext<StoriesContextType | undefined>(undefined)
 
 export function StoriesProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
-  const [stories, setStories] = useState<Story[]>(() => readStoriesFromStorage())
+  const [stories, setStories] = useState<Story[]>(() => getStories())
 
   // Cleanup expired stories on interval
   useEffect(() => {
@@ -53,7 +54,7 @@ export function StoriesProvider({ children }: { children: React.ReactNode }) {
       const now = new Date().toISOString()
       setStories((prev) => {
         const filtered = prev.filter((s) => s.expiresAt > now)
-        if (filtered.length !== prev.length) saveStoriesToStorage(filtered)
+        if (filtered.length !== prev.length) saveStories(filtered)
         return filtered
       })
     }
@@ -66,8 +67,8 @@ export function StoriesProvider({ children }: { children: React.ReactNode }) {
   // Watch storage events to sync across tabs
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) {
-        setStories(readStoriesFromStorage())
+      if (e.key === "quickchat_stories") {
+        setStories(getStories())
       }
     }
     window.addEventListener("storage", onStorage)
@@ -92,7 +93,7 @@ export function StoriesProvider({ children }: { children: React.ReactNode }) {
     }
     setStories((prev) => {
       const next = [story, ...prev]
-      saveStoriesToStorage(next)
+      saveStories(next)
       return next
     })
     return story
@@ -101,7 +102,7 @@ export function StoriesProvider({ children }: { children: React.ReactNode }) {
   const removeStory = useCallback((storyId: string) => {
     setStories((prev) => {
       const updated = prev.filter((s) => s.id !== storyId)
-      saveStoriesToStorage(updated)
+      saveStories(updated)
       return updated
     })
   }, [])
@@ -114,7 +115,7 @@ export function StoriesProvider({ children }: { children: React.ReactNode }) {
         if (!s.viewers.includes(viewerId)) s.viewers = [...s.viewers, viewerId]
         return s
       })
-      saveStoriesToStorage(updated)
+      saveStories(updated)
       return updated
     })
   }, [])

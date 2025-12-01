@@ -1,13 +1,6 @@
 "use client"
 
-/**
- * QuickChat - Main Application Entry Point
- *
- * This is the root page component that handles:
- * - Authentication state routing
- * - Context providers setup
- * - Page transitions
- */
+
 
 import { useState } from "react"
 import { AuthProvider, useAuth } from "@/context/auth-context"
