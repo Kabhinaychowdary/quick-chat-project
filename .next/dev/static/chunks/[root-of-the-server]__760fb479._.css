@@ -187,6 +187,7 @@
     --color-red-400: #ff6568;
     --color-red-500: #fb2c36;
     --color-red-600: #e40014;
+    --color-red-700: #bf000f;
     --color-red-800: #9f0712;
     --color-green-100: #dcfce7;
     --color-green-800: #016630;
@@ -255,6 +256,7 @@
       --color-red-400: lab(63.7053% 60.7449 31.3109);
       --color-red-500: lab(55.4814% 75.0732 48.8528);
       --color-red-600: lab(48.4493% 77.4328 61.5452);
+      --color-red-700: lab(40.4273% 67.2623 53.7441);
       --color-red-800: lab(33.7174% 55.8993 41.0293);
       --color-green-100: lab(96.186% -13.8464 6.52362);
       --color-green-800: lab(37.4616% -36.7971 22.9692);
@@ -738,40 +740,6 @@
 
   .row-start-1 {
     grid-row-start: 1;
-  }
-
-  .container {
-    width: 100%;
-  }
-
-  @media (min-width: 40rem) {
-    .container {
-      max-width: 40rem;
-    }
-  }
-
-  @media (min-width: 48rem) {
-    .container {
-      max-width: 48rem;
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .container {
-      max-width: 64rem;
-    }
-  }
-
-  @media (min-width: 80rem) {
-    .container {
-      max-width: 80rem;
-    }
-  }
-
-  @media (min-width: 96rem) {
-    .container {
-      max-width: 96rem;
-    }
   }
 
   .\!m-0 {
@@ -2013,6 +1981,10 @@
     background-color: var(--color-red-500);
   }
 
+  .bg-red-600 {
+    background-color: var(--color-red-600);
+  }
+
   .bg-secondary {
     background-color: var(--secondary);
   }
@@ -2432,6 +2404,10 @@
     color: var(--primary-foreground);
   }
 
+  .text-red-500 {
+    color: var(--color-red-500);
+  }
+
   .text-red-800 {
     color: var(--color-red-800);
   }
@@ -2692,10 +2668,6 @@
 
   .\[--cell-size\:--spacing\(8\)\] {
     --cell-size: calc(var(--spacing) * 8);
-  }
-
-  .running {
-    animation-play-state: running;
   }
 
   .group-focus-within\/menu-item\:opacity-100:is(:where(.group\/menu-item):focus-within *) {
@@ -3176,6 +3148,12 @@
   @media (hover: hover) {
     .hover\:bg-red-100:hover {
       background-color: var(--color-red-100);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-red-700:hover {
+      background-color: var(--color-red-700);
     }
   }
 

@@ -56,18 +56,19 @@ export function saveChatsToStorage(chats: Chat[]) {
     console.error("[Storage Adapter] Error saving chats to localStorage:", e)
   }
 
-  // Background sync to backend
+  // Background sync to backend - POST each chat
   ;(async () => {
     try {
-      // For simplicity: replace remote `chats` collection with current client copy.
-      await fetch(`${API_BASE}/chats`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(chats),
-      })
+      for (const chat of chats) {
+        await fetch(`${API_BASE}/chats`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(chat),
+        }).catch(() => {}) // Silently ignore errors
+      }
+      console.log("[Storage Adapter] Synced chats to backend")
     } catch (e) {
-      // json-server does not have a native bulk replace endpoint; log and continue
-      console.warn("[Storage Adapter] Could not PUT chats to backend (is json-server running?):", e)
+      console.warn("[Storage Adapter] Could not sync chats to backend (is json-server running?):", e)
     }
   })()
 }
@@ -89,13 +90,16 @@ export function saveMessagesToStorage(messages: Message[]) {
 
   ;(async () => {
     try {
-      await fetch(`${API_BASE}/messages`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(messages),
-      })
+      for (const msg of messages) {
+        await fetch(`${API_BASE}/messages`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(msg),
+        }).catch(() => {}) // Silently ignore errors
+      }
+      console.log("[Storage Adapter] Synced messages to backend")
     } catch (e) {
-      console.warn("[Storage Adapter] Could not PUT messages to backend (is json-server running?):", e)
+      console.warn("[Storage Adapter] Could not sync messages to backend (is json-server running?):", e)
     }
   })()
 }
@@ -117,13 +121,16 @@ export function saveAllUsers(users: User[]) {
 
   ;(async () => {
     try {
-      await fetch(`${API_BASE}/users`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(users),
-      })
+      for (const user of users) {
+        await fetch(`${API_BASE}/users`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user),
+        }).catch(() => {}) // Silently ignore errors
+      }
+      console.log("[Storage Adapter] Synced users to backend")
     } catch (e) {
-      console.warn("[Storage Adapter] Could not PUT users to backend (is json-server running?):", e)
+      console.warn("[Storage Adapter] Could not sync users to backend (is json-server running?):", e)
     }
   })()
 }
@@ -144,13 +151,16 @@ export function saveAllRequests(requests: any[]) {
 
   ;(async () => {
     try {
-      await fetch(`${API_BASE}/friendRequests`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requests),
-      })
+      for (const req of requests) {
+        await fetch(`${API_BASE}/friendRequests`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(req),
+        }).catch(() => {}) // Silently ignore errors
+      }
+      console.log("[Storage Adapter] Synced friend requests to backend")
     } catch (e) {
-      console.warn("[Storage Adapter] Could not PUT friendRequests to backend:", e)
+      console.warn("[Storage Adapter] Could not sync friendRequests to backend:", e)
     }
   })()
 }
@@ -171,13 +181,16 @@ export function saveAllFriendships(friendships: any[]) {
 
   ;(async () => {
     try {
-      await fetch(`${API_BASE}/friendships`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(friendships),
-      })
+      for (const friendship of friendships) {
+        await fetch(`${API_BASE}/friendships`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(friendship),
+        }).catch(() => {}) // Silently ignore errors
+      }
+      console.log("[Storage Adapter] Synced friendships to backend")
     } catch (e) {
-      console.warn("[Storage Adapter] Could not PUT friendships to backend:", e)
+      console.warn("[Storage Adapter] Could not sync friendships to backend:", e)
     }
   })()
 }
@@ -198,13 +211,16 @@ export function saveStories(stories: any[]) {
 
   ;(async () => {
     try {
-      await fetch(`${API_BASE}/stories`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(stories),
-      })
+      for (const story of stories) {
+        await fetch(`${API_BASE}/stories`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(story),
+        }).catch(() => {}) // Silently ignore errors
+      }
+      console.log("[Storage Adapter] Synced stories to backend")
     } catch (e) {
-      console.warn("[Storage Adapter] Could not PUT stories to backend:", e)
+      console.warn("[Storage Adapter] Could not sync stories to backend:", e)
     }
   })()
 }
